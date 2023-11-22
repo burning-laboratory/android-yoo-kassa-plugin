@@ -8,8 +8,7 @@ An add-on to the Yoo Kassa SDK library for convenient use in Unity applications.
 
 List of gradle dependencies for plugin.
 
-```text
-
+```groovy
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
