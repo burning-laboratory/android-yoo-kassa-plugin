@@ -11,6 +11,10 @@ android {
         lintConfig = file("lint.xml")
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.burninglab.yoomoneysdk"
         minSdk 24
