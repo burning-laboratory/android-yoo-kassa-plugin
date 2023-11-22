@@ -3,13 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-lint {
-    lintConfig = file("misc/android_glide_lint.xml")
-}
-
 android {
     namespace 'com.burninglab.yoomoneysdk'
     compileSdk 34
+
+    lint {
+        lintConfig = file("lint.xml")
+    }
 
     defaultConfig {
         applicationId "com.burninglab.yoomoneysdk"
