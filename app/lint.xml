@@ -2,6 +2,6 @@
 <!-- https://github.com/bumptech/glide/issues/4940 -->
 <lint>
     <issue id="NotificationPermission">
-        <ignore regexp="com.bumptech.glide.request.target.NotificationTarget" />
+        <ignore regexp="com.squareup.picasso.RemoteViewsAction.NotificationAction" />
     </issue>
 </lint>
