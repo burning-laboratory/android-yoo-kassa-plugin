@@ -1,4 +1,4 @@
-package com.burninglab.ymunityagent
+package com.burninglab.yookassaunityplugin
 
 import org.junit.Test
 

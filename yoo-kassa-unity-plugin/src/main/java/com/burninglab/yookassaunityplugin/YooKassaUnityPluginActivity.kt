@@ -1,10 +1,9 @@
-package com.burninglab.ymunityagent
+package com.burninglab.yookassaunityplugin
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.unity3d.player.UnityPlayer
@@ -17,7 +16,7 @@ import ru.yoomoney.sdk.kassa.payments.checkoutParameters.SavePaymentMethod
 import java.math.BigDecimal
 import java.util.*
 
-class YmUnityAgentActivity : AppCompatActivity() {
+class YooKassaUnityPluginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
     }
@@ -44,7 +43,7 @@ class YmUnityAgentActivity : AppCompatActivity() {
     }
 
     public fun launchActivity(unityPlayerActivity: Activity){
-        val intent: Intent = Intent(unityPlayerActivity, YmUnityAgentActivity::class.java)
+        val intent: Intent = Intent(unityPlayerActivity, YooKassaUnityPluginActivity::class.java)
         unityPlayerActivity.startActivity(intent)
     }
 

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.burninglab.ymunityagent'
+    namespace 'com.burninglab.yookassaunityplugin'
     compileSdk 34
 
     defaultConfig {

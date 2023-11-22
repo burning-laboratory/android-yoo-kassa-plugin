@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "yoo-money-sdk"
 include ':app'
-include ':ymunityagent'
+include ':yoo-kassa-unity-plugin'
