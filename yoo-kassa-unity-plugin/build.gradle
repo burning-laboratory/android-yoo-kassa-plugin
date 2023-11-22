@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10' apply true
 }
 
 android {
@@ -35,6 +36,8 @@ android {
 
 dependencies {
 
+    implementation 'androidx.core:core-ktx:+'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.0.0'
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.8.0'

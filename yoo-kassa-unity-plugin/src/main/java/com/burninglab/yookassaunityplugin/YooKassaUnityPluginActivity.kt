@@ -43,7 +43,7 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
     }
 
     public fun launchActivity(unityPlayerActivity: Activity){
-        val intent: Intent = Intent(unityPlayerActivity, YooKassaUnityPluginActivity::class.java)
+        val intent = Intent(unityPlayerActivity, YooKassaUnityPluginActivity::class.java)
         unityPlayerActivity.startActivity(intent)
     }
 
