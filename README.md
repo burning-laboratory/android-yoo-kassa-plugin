@@ -1,5 +1,5 @@
-<p>
-    <img src="https://i.ibb.co/z89TqzB/yoo-kassa-horizontal-logo.png" alt="Project Logo" width="726">
+<p align="center">
+    <img src="https://i.ibb.co/NYKvCFB/Yoo-Kassa-Horizontal-Logo.png" alt="Project Logo" width="726">
 </p>
 
 <p>
