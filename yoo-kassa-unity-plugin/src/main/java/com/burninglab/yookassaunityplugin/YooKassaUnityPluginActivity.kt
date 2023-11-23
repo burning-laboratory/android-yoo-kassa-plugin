@@ -6,17 +6,80 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.burninglab.yookassaunityplugin.types.requests.TokenizationRequest
+import com.burninglab.yookassaunityplugin.types.responses.TokenizationResponse
 import com.unity3d.player.UnityPlayer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import ru.yoomoney.sdk.kassa.payments.Checkout
 import ru.yoomoney.sdk.kassa.payments.Checkout.createTokenizationResult
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.Amount
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentMethodType
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentParameters
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.SavePaymentMethod
-import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Service activity for yoo kassa android plugin.
+ */
 class YooKassaUnityPluginActivity : AppCompatActivity() {
+
+    //region Private Fields
+
+    /**
+     * Activity extra tokenization request key.
+     */
+    private var TokenizationRequestExtraKey = "tokenization_request"
+
+    /**
+     * Key for getting send unity message flag from activity extras.
+     */
+    private var DisableCallUnityExtraKey = "disable_call_unity"
+
+    //endregion
+
+    //region Activity Launchers
+
+    /**
+     * Yoo kassa tokenization activity launcher.
+     */
+    private var tokenizationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val response: TokenizationResponse = TokenizationResponse()
+
+        response.status = result.resultCode == Activity.RESULT_OK
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+
+            val paymentTokenizationResult = data?.let { createTokenizationResult(it) }
+
+            response.result.token = paymentTokenizationResult?.paymentToken
+            response.result.paymentMethodType = paymentTokenizationResult?.paymentMethodType
+        }else{
+            response.error.errorCode = "CANCELED_BY_USER"
+            response.error.errorMessage = "Tokenization canceled by user."
+        }
+
+        val serializedResponse = Json.encodeToString(response)
+
+        val extras = intent.extras
+        val disableUnityCall = extras?.getBoolean(DisableCallUnityExtraKey)
+        if (disableUnityCall == false){
+            val serializedTokenizationRequest = extras.getString(TokenizationRequestExtraKey)
+            val tokenizationRequest = Json.decodeFromString<TokenizationRequest>(serializedTokenizationRequest.toString())
+            val responseConfig = tokenizationRequest.responseConfig
+
+            UnityPlayer.UnitySendMessage(responseConfig.callbackObjectName, responseConfig.callbackMethodName, serializedResponse);
+        }
+
+        finish()
+    }
+
+    //endregion
+
+    //region Activity Methods
+
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
     }
@@ -26,39 +89,46 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
         setContentView(R.layout.payment_activity)
 
-        createTokenizeIntent(this)
+        val extras = intent.extras
+        val serializedRequest = extras?.getString(TokenizationRequestExtraKey)
+
+        createTokenizeIntent(this, serializedRequest)
     }
 
-    private var tokenizationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
+    //endregion
 
-            val paymentTokenizationResult = data?.let { createTokenizationResult(it) }
-            val paymentToke: String? = paymentTokenizationResult?.paymentToken
-            UnityPlayer.UnitySendMessage("AndroidCommunication", "ReceivePaymentToken", paymentToke);
+    //region Private Methods
 
-            finish()
-        }
-    }
+    private fun createTokenizeIntent(unityPlayerActivity: Activity, serializedTokenizationRequest: String?){
+        val request = Json.decodeFromString<TokenizationRequest>(serializedTokenizationRequest.toString())
 
-    public fun launchActivity(unityPlayerActivity: Activity){
-        val intent = Intent(unityPlayerActivity, YooKassaUnityPluginActivity::class.java)
-        unityPlayerActivity.startActivity(intent)
-    }
-
-    public fun createTokenizeIntent(unityPlayerActivity: Activity){
         val paymentParameters = PaymentParameters(
-            amount = Amount(BigDecimal.TEN, Currency.getInstance("RUB")),
-            title = "Название товара",
-            subtitle = "Описание товара",
-            clientApplicationKey = "test_MjgxOTk2hbC9wBL6ZELMoju3OfTA0qMGWTYBvVQjvZs", // ключ для клиентских приложений из личного кабинета ЮKassa (https://yookassa.ru/my/api-keys-settings)
-            shopId = "281996", // идентификатор магазина ЮKassa
-            savePaymentMethod = SavePaymentMethod.OFF, // флаг выключенного сохранения платежного метода,
-            paymentMethodTypes = setOf(PaymentMethodType.YOO_MONEY, PaymentMethodType.BANK_CARD, PaymentMethodType.SBERBANK),
-            authCenterClientId = "example_authCenterClientId", // идентификатор, полученный при регистрации приложения на сайте https://yookassa.ru
+            amount = Amount(
+                request.bundle.amountData.amount,
+                Currency.getInstance(request.bundle.amountData.currencyCode)
+            ),
+            title = request.bundle.title,
+            subtitle = request.bundle.description,
+            clientApplicationKey = request.authData.appKey,
+            shopId = request.authData.shopId,
+            savePaymentMethod = request.options.savePaymentMethod,
+            paymentMethodTypes = request.options.paymentMethods,
+            authCenterClientId = request.authData.clientId,
         )
         val intent: Intent = Checkout.createTokenizeIntent(unityPlayerActivity, paymentParameters)
         tokenizationLauncher.launch(intent)
     }
+
+    //endregion
+
+    //region Public Methods
+
+    public fun startTokenization(unityPlayerActivity: Activity, serializedTokenizationRequest: String, disableUnityCall: Boolean = false){
+        val intent = Intent(unityPlayerActivity, YooKassaUnityPluginActivity::class.java)
+        intent.putExtra(DisableCallUnityExtraKey, disableUnityCall)
+        intent.putExtra(TokenizationRequestExtraKey, serializedTokenizationRequest)
+        unityPlayerActivity.startActivity(intent)
+    }
+
+    //endregion
 }

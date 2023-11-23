@@ -28,4 +28,42 @@ dependencies {
 
 ## Usage:
 
+## Examples:
+
+### Serialized tokenization request example:
+
+Example of serialized tokenization request data.
+
+```json
+{
+  "authData": {
+    "shopId": "Your yoo kassa shop id.",
+    "appKey": "Your yoo kassa SDK key from",
+    "clientId": "example_authCenterClientId"
+  },
+  "bundle": {
+    "id": "вв",
+    "title": "title",
+    "description": "description",
+    "amountData": {
+      "amount": 150,
+      "currencyCode": "RUB"
+    }
+  },
+  "responseConfig": {
+    "callbackObjectName": "Unity yoo Kassa plugin callbacks game object name",
+    "callbackMethodName": "OnTokenizationCompleteEventHandler"
+  },
+  "options": {
+    "paymentMethods": [
+      "BANK_CARD",
+      "YOO_MONEY",
+      "SBP",
+      "GOOGLE_PAY"
+    ],
+    "savePaymentMethod": "USER_SELECTS"
+  }
+}
+```
+
 ## License
