@@ -30,7 +30,9 @@ dependencies {
 
 ## Examples:
 
-### Serialized tokenization request example:
+### Tokenization requests
+
+#### Serialized tokenization request example:
 
 Example of serialized tokenization request data.
 
@@ -62,6 +64,47 @@ Example of serialized tokenization request data.
       "GOOGLE_PAY"
     ],
     "savePaymentMethod": "USER_SELECTS"
+  }
+}
+```
+
+### Tokenization responses
+
+List of tokenization responses variations.
+
+#### Success tokenization response example
+
+Serialized response after success tokenization process complete. Sending to unity with response config settings.
+
+```json
+{
+  "status": true,
+  "result": {
+    "token": "pt-2cf237d1-0000-50ab-8000-022373d12d5d",
+    "paymentMethodType": "BANK_CARD"
+  },
+  "bundle": {
+    "id": "Optional bundle id.",
+    "title": "title",
+    "description": "description",
+    "amountData": {
+      "amount": 150,
+      "currencyCode": "RUB"
+    }
+  }
+}
+```
+
+#### Error tokenization response example
+
+Serialized response after error tokenization process. Sending to unity with unity response config settings.
+
+```json
+{
+  "status": false,
+  "error": {
+    "errorCode": "CANCELED_BY_USER",
+    "errorMessage": "Tokenization canceled by user."
   }
 }
 ```

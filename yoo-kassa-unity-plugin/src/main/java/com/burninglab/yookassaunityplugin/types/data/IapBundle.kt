@@ -16,15 +16,15 @@ public data class IapBundle(
     /**
      * Payment bundle title.
      */
-    var title: String,
+    var title: String = "",
 
     /**
      * Payment bundle description.
      */
-    var description: String,
+    var description: String = "",
 
     /**
      * Payment bundle amount data.
      */
-    var amountData: PaymentAmount
+    var amountData: PaymentAmount = PaymentAmount()
 )

@@ -12,10 +12,10 @@ data class PaymentAmount(
     /**
      * Bundle price amount
      */
-    var amount: BigDecimalJson,
+    var amount: BigDecimalJson = BigDecimalJson(1),
 
     /**
      * Bundle price currency code.
      */
-    var currencyCode: String
+    var currencyCode: String = ""
 )

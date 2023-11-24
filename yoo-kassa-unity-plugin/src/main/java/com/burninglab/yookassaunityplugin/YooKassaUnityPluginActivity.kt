@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.burninglab.yookassaunityplugin.types.requests.TokenizationRequest
@@ -45,9 +46,13 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
      * Yoo kassa tokenization activity launcher.
      */
     private var tokenizationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val response: TokenizationResponse = TokenizationResponse()
+        val response = TokenizationResponse(
+            status = result.resultCode == Activity.RESULT_OK
+        )
 
-        response.status = result.resultCode == Activity.RESULT_OK
+        val extras = intent.extras
+        val serializedTokenizationRequest = extras?.getString(TokenizationRequestExtraKey)
+        val tokenizationRequest = Json.decodeFromString<TokenizationRequest>(serializedTokenizationRequest.toString())
 
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
@@ -56,6 +61,9 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
             response.result.token = paymentTokenizationResult?.paymentToken
             response.result.paymentMethodType = paymentTokenizationResult?.paymentMethodType
+
+            response.bundle = tokenizationRequest.bundle
+
         }else{
             response.error.errorCode = "CANCELED_BY_USER"
             response.error.errorMessage = "Tokenization canceled by user."
@@ -63,15 +71,15 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
         val serializedResponse = Json.encodeToString(response)
 
-        val extras = intent.extras
         val disableUnityCall = extras?.getBoolean(DisableCallUnityExtraKey)
         if (disableUnityCall == false){
-            val serializedTokenizationRequest = extras.getString(TokenizationRequestExtraKey)
-            val tokenizationRequest = Json.decodeFromString<TokenizationRequest>(serializedTokenizationRequest.toString())
             val responseConfig = tokenizationRequest.responseConfig
 
             UnityPlayer.UnitySendMessage(responseConfig.callbackObjectName, responseConfig.callbackMethodName, serializedResponse);
         }
+
+
+        Log.i("I", "Tokenization response: $serializedResponse")
 
         finish()
     }
