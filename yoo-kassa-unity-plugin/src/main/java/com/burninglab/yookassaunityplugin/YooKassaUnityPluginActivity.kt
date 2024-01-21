@@ -38,6 +38,8 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
      */
     private var DisableCallUnityExtraKey = "disable_call_unity"
 
+    private var ProcessStarted = false;
+
     //endregion
 
     //region Activity Launchers
@@ -94,10 +96,14 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
         setContentView(R.layout.payment_activity)
 
-        val extras = intent.extras
-        val serializedRequest = extras?.getString(TokenizationRequestExtraKey)
+        if (!ProcessStarted)
+        {
+            val extras = intent.extras
+            val serializedRequest = extras?.getString(TokenizationRequestExtraKey)
 
-        createTokenizeIntent(this, serializedRequest)
+            createTokenizeIntent(this, serializedRequest)
+            ProcessStarted = true;
+        }
     }
 
     //endregion
