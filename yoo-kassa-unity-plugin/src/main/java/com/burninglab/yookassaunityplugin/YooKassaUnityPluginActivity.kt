@@ -78,9 +78,6 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
             UnityPlayer.UnitySendMessage(responseConfig.callbackObjectName, responseConfig.callbackMethodName, serializedResponse);
         }
 
-
-        Log.i("I", "Tokenization response: $serializedResponse")
-
         finish()
     }
 

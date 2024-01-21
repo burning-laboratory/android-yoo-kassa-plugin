@@ -39,14 +39,14 @@ Example of serialized tokenization request data.
 ```json
 {
   "authData": {
-    "shopId": "Your yoo kassa shop id.",
-    "appKey": "Your yoo kassa SDK key from",
+    "shopId": "Your Yoo Kassa shop id.",
+    "appKey": "Your Yoo Kassa SDK key from shop settings.",
     "clientId": "example_authCenterClientId"
   },
   "bundle": {
-    "id": "вв",
-    "title": "title",
-    "description": "description",
+    "id": "buying bundle id.",
+    "title": "Display bundle title",
+    "description": "Display bundle description",
     "amountData": {
       "amount": 150,
       "currencyCode": "RUB"
