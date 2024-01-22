@@ -21,12 +21,42 @@ List of gradle dependencies for plugin.
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
-    implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.8.0'
 }
 ```
 
 ## Usage:
+
+### Start tokenization process:
+
+Start tokenization process from Unity application example.
+
+```csharp
+    public void RunTokenization()
+    {
+        // Configure your tokenization request.
+        // See tokenization request samples in Examples section.
+        string tokenizationRequest = "{}";
+
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        // Call tokenization process from ui thread.
+        currentActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+        {
+            using (AndroidJavaObject yooKassaUnityPluginActivity = new AndroidJavaObject("com.burninglab.yookassaunityplugin.YooKassaUnityPluginActivity"))
+            {
+                AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+                // Call start tokenization plugin method.
+                yooKassaUnityPluginActivity.Call("startTokenization", currentActivity, tokenizationRequest, _disableResponseEventHandlersCalling);
+            }
+        }));
+    }
+```
+
+### Start confirmation process:
 
 ## Examples:
 
