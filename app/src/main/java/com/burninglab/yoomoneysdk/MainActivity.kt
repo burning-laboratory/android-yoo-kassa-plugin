@@ -55,6 +55,6 @@ class MainActivity : AppCompatActivity() {
         val serializedRequest = Json.encodeToString(request)
 
         val act = YooKassaUnityPluginActivity()
-        act.startTokenization(this, serializedRequest, true)
+        act.startTokenization(this, serializedRequest)
     }
 }

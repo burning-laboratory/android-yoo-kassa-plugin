@@ -16,7 +16,7 @@ data class ConfirmationRequest(
     var authData: PaymentAuth,
 
     /**
-     *
+     * Payment id for confirm.
      */
     var paymentId: String,
 
