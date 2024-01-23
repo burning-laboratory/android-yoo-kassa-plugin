@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ErrorInfo(
-    var errorCode: String,
-    var errorMessage: String
+    var errorCode: String? = "",
+    var errorMessage: String? = ""
 )

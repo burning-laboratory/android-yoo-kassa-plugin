@@ -1,5 +1,8 @@
 package com.burninglab.yookassaunityplugin.types.responses
 
+import android.os.Bundle
+import com.burninglab.yookassaunityplugin.types.data.ErrorInfo
+import com.burninglab.yookassaunityplugin.types.data.IapBundle
 import kotlinx.serialization.Serializable
 
 /**
@@ -10,20 +13,18 @@ data class ConfirmationResponse(
     /**
      * Confirmed payment id.
      */
-    val id: String,
+    var id: String = "",
+
+    /**
+     * Confirmed iap bundle.
+     */
+    var bundle: IapBundle = IapBundle(),
 
     /**
      * Confirmation status.
      */
-    val status: Boolean,
+    var status: Boolean = false,
 
-    /**
-     * Confirmation error code from Yoo Kassa
-     */
-    val errorCode: String?,
 
-    /**
-     * Confirmation error message from yoo kassa.
-     */
-    val errorMessage: String?
+    var error: ErrorInfo = ErrorInfo()
 )

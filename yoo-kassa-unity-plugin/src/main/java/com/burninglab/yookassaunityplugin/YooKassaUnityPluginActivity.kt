@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.burninglab.yookassaunityplugin.types.requests.ConfirmationRequest
 import com.burninglab.yookassaunityplugin.types.requests.TokenizationRequest
+import com.burninglab.yookassaunityplugin.types.responses.ConfirmationResponse
 import com.burninglab.yookassaunityplugin.types.responses.TokenizationResponse
 import com.unity3d.player.UnityPlayer
 import kotlinx.serialization.encodeToString
@@ -81,9 +82,18 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
             response.bundle = tokenizationRequest.bundle
 
-        }else{
+        }
+
+        if (result.resultCode == Activity.RESULT_CANCELED){
             response.error.errorCode = "CANCELED_BY_USER"
             response.error.errorMessage = "Tokenization canceled by user."
+        }
+
+        if (result.resultCode == Checkout.RESULT_ERROR){
+            val data: Intent? = result.data
+
+            response.error.errorCode = data?.getStringExtra(Checkout.EXTRA_ERROR_CODE)
+            response.error.errorMessage = data?.getStringExtra(Checkout.EXTRA_ERROR_DESCRIPTION)
         }
 
         val serializedResponse = Json.encodeToString(response)
@@ -98,7 +108,7 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
      * Yoo Kassa confirmation activity launcher.
      */
     private var confirmationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val response = TokenizationResponse(
+        val response = ConfirmationResponse(
             status = result.resultCode == Activity.RESULT_OK
         )
 
@@ -108,15 +118,20 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
         val confirmationRequest = Json.decodeFromString<ConfirmationRequest>(serializedConfirmationRequest.toString())
 
         if (result.resultCode == Activity.RESULT_OK){
-
+            response.bundle = confirmationRequest.bundle
+            response.id = confirmationRequest.paymentId
         }
 
         if (result.resultCode == Activity.RESULT_CANCELED){
-
+            response.error.errorCode = "CANCELED_BY_USER"
+            response.error.errorMessage = "Payment confirmation canceled by user."
         }
 
         if (result.resultCode == Checkout.RESULT_ERROR){
+            val data: Intent? = result.data
 
+            response.error.errorCode = data?.getStringExtra(Checkout.EXTRA_ERROR_CODE)
+            response.error.errorMessage = data?.getStringExtra(Checkout.EXTRA_ERROR_DESCRIPTION)
         }
 
         val serializedResponse = Json.encodeToString(response)

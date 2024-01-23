@@ -1,8 +1,10 @@
 package com.burninglab.yookassaunityplugin.types.requests
 
+import com.burninglab.yookassaunityplugin.types.data.IapBundle
 import com.burninglab.yookassaunityplugin.types.data.PaymentAuth
 import com.burninglab.yookassaunityplugin.types.data.ResponseConfig
 import kotlinx.serialization.Serializable
+
 import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentMethodType
 
 /**
@@ -34,4 +36,9 @@ data class ConfirmationRequest(
      * Payment method type.
      */
     var paymentMethodType: PaymentMethodType,
+
+    /**
+     * Payment bundle.
+     */
+    var bundle: IapBundle
 )
