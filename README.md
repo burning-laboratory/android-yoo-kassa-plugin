@@ -58,6 +58,33 @@ Start tokenization process from Unity application example.
 
 ### Start confirmation process:
 
+Start payment confirmation process.
+
+```csarp
+    public void RunConfirmation()
+    {
+        // Configure your confirmation request.
+        // See confirmation request samples in Examples section.
+        string confirmationRequest = "{}";
+
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        // Call tokenization process from ui thread.
+        currentActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+        {
+            using (AndroidJavaObject yooKassaUnityPluginActivity = new AndroidJavaObject("com.burninglab.yookassaunityplugin.YooKassaUnityPluginActivity"))
+            {
+                AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+                // Call start tokenization plugin method.
+                yooKassaUnityPluginActivity.Call("startConfirmation", currentActivity, confirmationRequest);
+            }
+        }));
+    }
+```
+
 ## Examples:
 
 ### Tokenization requests
@@ -136,6 +163,80 @@ Serialized response after error tokenization process. Sending to unity with unit
     "errorCode": "CANCELED_BY_USER",
     "errorMessage": "Tokenization canceled by user."
   }
+}
+```
+
+### Confirmation requests
+
+Examples of payment confirmation requests.
+
+#### Serialized confirmation request example:
+
+Example of payment confirmation request.
+
+```json
+{
+  "authData": {
+    "shopId": "Your Yoo Kassa shop id.",
+    "appKey": "Your Yoo Kassa SDK key from shop settings.",
+    "clientId": "example_authCenterClientId"
+  },
+  "bundle": {
+    "id": "buying bundle id.",
+    "title": "Display bundle title",
+    "description": "Display bundle description",
+    "amountData": {
+      "amount": 150,
+      "currencyCode": "RUB"
+    }
+  },
+	"responseConfig": {
+		"callbackObjectName": "Yoo Kassa Payment Provider",
+		"callbackMethodName": "OnConfirmationCompleteEventHandler"
+	},
+	"confirmationUrl": "Yoo Lassa payment confirmation URL.",
+	"paymentMethodType": "BANK_CARD",
+	"paymentId": "Yoo Kassa payment id."
+}
+```
+
+### Confirmation responses
+
+List of confirmation responses.
+
+#### Confirmation complete response example:
+
+Example of complete confirmation response.
+
+> **IMPORTANT!!!** Successful completion of tokenization does **not mean successful completion of the payment**. Before giving out rewards to a player, you need to request the payment status by his id.
+
+```json
+{
+	"status": true,
+	"paymentId": "2d412ec4-000f-5000-9000-11b76bd4b1c7",
+	"bundle": {
+		"id": "local_test_payment_bundle",
+		"title": "Test Payment Bundle",
+		"description": "This is test payment bundle description.",
+		"amountData": {
+			"amount": 149,
+			"currencyCode": "RUB"
+		}
+	}
+}
+```
+
+#### Confirmation error response example:
+
+Example of confirmation response.
+
+```json
+{
+    "status": false,
+	"error": {
+		"errorCode": "CANCELED_BY_USER",
+		"errorMessage": "Payment confirmation canceled by user."
+	}
 }
 ```
 

@@ -85,6 +85,7 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
         }
 
         if (result.resultCode == Activity.RESULT_CANCELED){
+            response.status = false
             response.error.errorCode = "CANCELED_BY_USER"
             response.error.errorMessage = "Tokenization canceled by user."
         }
@@ -92,6 +93,7 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
         if (result.resultCode == Checkout.RESULT_ERROR){
             val data: Intent? = result.data
 
+            response.status = false
             response.error.errorCode = data?.getStringExtra(Checkout.EXTRA_ERROR_CODE)
             response.error.errorMessage = data?.getStringExtra(Checkout.EXTRA_ERROR_DESCRIPTION)
         }
@@ -119,7 +121,7 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
 
         if (result.resultCode == Activity.RESULT_OK){
             response.bundle = confirmationRequest.bundle
-            response.id = confirmationRequest.paymentId
+            response.paymentId = confirmationRequest.paymentId
         }
 
         if (result.resultCode == Activity.RESULT_CANCELED){
