@@ -1,0 +1,15 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.burning-lab</groupId>
+    <artifactId>yoo-kassa-unity-plugin</artifactId>
+    <version>1.0.0</version>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/burning-laboratory/android-yoo-kassa-plugin</url>
+        </repository>
+    </distributionManagement>
+</project>
