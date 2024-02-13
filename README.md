@@ -15,14 +15,37 @@ An add-on to the Yoo Kassa SDK library for convenient use in Unity applications.
 
 ## Dependencies:
 
-List of gradle dependencies for plugin.
+List of [EDM4U](https://github.com/googlesamples/unity-jar-resolver.git) dependencies for plugin.
 
-```groovy
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
-    implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:6.8.0'
-}
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+
+        <androidPackage spec="androidx.appcompat:appcompat:1.3.1"/>
+        <androidPackage spec="org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"/>
+        
+        <androidPackage spec="ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:[6.8.0]">
+            <androidSdkPackageIds>
+                <androidSdkPackageId>yookassa-android-sdk</androidSdkPackageId>
+            </androidSdkPackageIds>
+            <repositories>
+                <repository>https://repo1.maven.org/maven2/</repository>
+            </repositories>
+        </androidPackage>
+
+        <androidPackage spec="com.burning-lab:yoo-kassa-unity-plugin:[1.0.0]">
+            <androidSdkPackageIds>
+                <androidSdkPackageId>yoo-kassa-unity-plugin</androidSdkPackageId>
+            </androidSdkPackageIds>
+            <repositories>
+                <repository>https://[GITHUB_USERNAME]:[GITHUB_USER_TOKEN]@maven.pkg.github.com/burning-laboratory/android-yoo-kassa-plugin/</repository>
+                
+            </repositories>
+        </androidPackage>
+        
+    </androidPackages>
+</dependencies>
 ```
 
 ## Usage:
@@ -60,7 +83,7 @@ Start tokenization process from Unity application example.
 
 Start payment confirmation process.
 
-```csarp
+```csharp
     public void RunConfirmation()
     {
         // Configure your confirmation request.
@@ -191,8 +214,8 @@ Example of payment confirmation request.
     }
   },
 	"responseConfig": {
-		"callbackObjectName": "Yoo Kassa Payment Provider",
-		"callbackMethodName": "OnConfirmationCompleteEventHandler"
+      "callbackObjectName": "Yoo Kassa Payment Provider",
+      "callbackMethodName": "OnConfirmationCompleteEventHandler"
 	},
 	"confirmationUrl": "Yoo Lassa payment confirmation URL.",
 	"paymentMethodType": "BANK_CARD",
@@ -212,17 +235,17 @@ Example of complete confirmation response.
 
 ```json
 {
-	"status": true,
-	"paymentId": "2d412ec4-000f-5000-9000-11b76bd4b1c7",
-	"bundle": {
-		"id": "local_test_payment_bundle",
-		"title": "Test Payment Bundle",
-		"description": "This is test payment bundle description.",
-		"amountData": {
-			"amount": 149,
-			"currencyCode": "RUB"
-		}
-	}
+  "status": true,
+  "paymentId": "2d412ec4-000f-5000-9000-11b76bd4b1c7",
+  "bundle": {
+    "id": "local_test_payment_bundle",
+    "title": "Test Payment Bundle",
+    "description": "This is test payment bundle description.",
+    "amountData": {
+      "amount": 149,
+      "currencyCode": "RUB"
+    }
+  }
 }
 ```
 
@@ -232,11 +255,11 @@ Example of confirmation response.
 
 ```json
 {
-    "status": false,
-	"error": {
-		"errorCode": "CANCELED_BY_USER",
-		"errorMessage": "Payment confirmation canceled by user."
-	}
+  "status": false,
+  "error": {
+    "errorCode": "CANCELED_BY_USER",
+    "errorMessage": "Payment confirmation canceled by user."
+  }
 }
 ```
 
