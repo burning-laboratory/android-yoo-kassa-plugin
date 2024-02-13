@@ -3,7 +3,8 @@
 
     <groupId>com.burning-lab</groupId>
     <artifactId>yoo-kassa-unity-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
+    <packaging>aar</packaging>
 
     <distributionManagement>
         <repository>
