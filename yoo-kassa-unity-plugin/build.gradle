@@ -65,7 +65,7 @@ publishing {
             pom {
                 groupId 'com.burning-lab'
                 artifactId 'yoo-kassa-unity-plugin'
-                version '1.0.1'
+                version '1.0.0'
             }
             artifact("$buildDir/outputs/aar/yoo-kassa-unity-plugin-release.aar")
         }
