@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10' apply true
+    id 'maven-publish' apply true
 }
 
 android {
@@ -56,4 +57,26 @@ dependencies {
 
 task exportJar(type: Copy){
     include('classes.jar')
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            pom {
+                groupId 'com.burning-lab'
+                artifactId 'yoo-kassa-unity-plugin'
+                version '1.0.0'
+            }
+            artifact("$buildDir/outputs/aar/yoo-kassa-unity-plugin-release.aar")
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.pkg.github.com/burning-laboratory/android-yoo-kassa-plugin"
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
