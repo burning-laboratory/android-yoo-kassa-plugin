@@ -221,7 +221,8 @@ class YooKassaUnityPluginActivity : AppCompatActivity() {
             context = unityPlayerActivity,
             confirmationUrl = request.confirmationUrl,
             paymentMethodType = request.paymentMethodType,
-            clientApplicationKey = request.authData.appKey
+            clientApplicationKey = request.authData.appKey,
+            shopId = request.authData.shopId
         )
 
         confirmationLauncher.launch(intent)
